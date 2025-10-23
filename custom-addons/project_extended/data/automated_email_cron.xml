@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Automated Email Reminder Cron Job -->
+        <record id="ir_cron_send_expiry_reminders" model="ir.cron">
+            <field name="name">Send Domain and Hosting Expiry Reminders</field>
+            <field name="model_id" ref="project_extended.model_project_domain"/>
+            <field name="state">code</field>
+            <field name="code">
+# Send automated expiry reminder emails using new email system
+env['project.domain'].send_automated_expiry_reminders()
+env['project.hosting'].send_automated_expiry_reminders()
+            </field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>

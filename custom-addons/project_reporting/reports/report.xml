@@ -1,0 +1,10 @@
+<odoo>
+  <report
+    id="action_report_project_summary"
+    model="project.project"
+    string="Project Summary"
+    report_type="qweb-pdf"
+    name="project_reporting.project_summary_report_template"
+    file="project_reporting.project_summary_report_template"
+  />
+</odoo>

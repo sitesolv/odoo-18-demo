@@ -1,0 +1,37 @@
+<odoo>
+    <!-- Inherit payment form view to add project income button -->
+    <record id="view_account_payment_form_inherit" model="ir.ui.view">
+        <field name="name">account.payment.form.inherit</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_create_project_income_manually" 
+                        type="object" 
+                        string="Create Project Income" 
+                        class="btn-primary"
+                        invisible="payment_type != 'inbound'"/>
+                <button name="action_debug_payment_info" 
+                        type="object" 
+                        string="Debug Payment Info" 
+                        class="btn-secondary"
+                        invisible="payment_type != 'inbound'"/>
+            </xpath>
+            <xpath expr="//form//group" position="inside">
+                <field name="project_income_created" readonly="1" string="Project Income Created"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Add tree view to show project income status -->
+    <record id="view_account_payment_tree_inherit" model="ir.ui.view">
+        <field name="name">account.payment.tree.inherit</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="project_income_created" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

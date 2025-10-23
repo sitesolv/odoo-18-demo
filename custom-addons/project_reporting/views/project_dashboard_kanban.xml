@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Dashboard Kanban View for Projects -->
+    <record id="view_dashboard_project_kanban" model="ir.ui.view">
+        <field name="name">project.project.dashboard.kanban</field>
+        <field name="model">project.project</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_dashboard" create="false" edit="false" delete="false">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="active"/>
+                <field name="user_id"/>
+                <field name="total_income"/>
+                <field name="total_expense"/>
+                <field name="net_profit"/>
+                <field name="profit_margin"/>
+                <field name="financial_status"/>
+                <field name="currency_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary">
+                                        <strong><field name="name"/></strong>
+                                    </div>
+                                    <div class="o_secondary">
+                                        <i class="fa fa-user"/> <field name="partner_id"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_kanban_card_content">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="o_field_widget mb-2">
+                                            <span class="text-success">
+                                                <i class="fa fa-arrow-up"/> Income: <field name="total_income" widget="monetary"/>
+                                            </span>
+                                        </div>
+                                        <div class="o_field_widget mb-2">
+                                            <span class="text-warning">
+                                                <i class="fa fa-arrow-down"/> Expense: <field name="total_expense" widget="monetary"/>
+                                            </span>
+                                        </div>
+                                        <div class="o_field_widget mb-2">
+                                            <span t-att-class="(record.net_profit.raw_value || 0) >= 0 ? 'text-success' : 'text-danger'">
+                                                <i class="fa fa-money"/> Profit: <field name="net_profit" widget="monetary"/>
+                                            </span>
+                                        </div>
+                                        <div class="o_field_widget">
+                                            <span class="text-info">
+                                                <i class="fa fa-percent"/> Margin: <field name="profit_margin" widget="float" digits="[16,1]"/>%
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <span class="badge" 
+                                          t-att-class="record.financial_status.raw_value === 'Profitable' ? 'badge-success' : 
+                                                      record.financial_status.raw_value === 'Loss' ? 'badge-danger' : 'badge-warning'">
+                                        <field name="financial_status"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Dashboard List View for Projects -->
+    <record id="view_dashboard_project_list" model="ir.ui.view">
+        <field name="name">project.project.dashboard.list</field>
+        <field name="model">project.project</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <list string="Project Financial Dashboard" create="false" edit="false" delete="false">
+                <field name="currency_id" invisible="1"/>
+                <field name="name"/>
+                <field name="partner_id" string="Client"/>
+                <field name="total_income" string="Income" sum="Total Income" widget="monetary"/>
+                <field name="total_expense" string="Expense" sum="Total Expense" widget="monetary"/>
+                <field name="net_profit" string="Profit" sum="Net Profit" widget="monetary" 
+                       decoration-success="net_profit &gt; 0" 
+                       decoration-danger="net_profit &lt; 0"/>
+                <field name="profit_margin" string="Margin %"/>
+                <field name="financial_status" string="Status" 
+                       decoration-success="financial_status == 'Profitable'" 
+                       decoration-danger="financial_status == 'Loss'"
+                       decoration-warning="financial_status == 'Break Even'"/>
+                <button name="view_income" type="object" string="View Income" class="btn-link"/>
+                <button name="view_expenses" type="object" string="View Expenses" class="btn-link"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_dashboard_project_search" model="ir.ui.view">
+        <field name="name">project.project.dashboard.search</field>
+        <field name="model">project.project</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <search string="Project Financial Dashboard">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <filter string="Active Projects" name="active_projects" domain="[('active', '=', True)]"/>
+                <filter string="Inactive Projects" name="inactive_projects" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Client" name="group_client" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Project Manager" name="group_manager" context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>

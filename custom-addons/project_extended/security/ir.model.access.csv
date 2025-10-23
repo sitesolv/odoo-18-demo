@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_project_domain_user,project.domain.user,model_project_domain,project.group_project_user,1,1,1,1
+access_project_hosting_user,project.hosting.user,model_project_hosting,project.group_project_user,1,1,1,1
+access_project_other_service_user,project.other.service.user,model_project_other_service,project.group_project_user,1,1,1,1
+access_project_income_user,project.income.user,model_project_income,project.group_project_user,1,1,1,1
+access_project_expense_user,project.expense.user,model_project_expense,project.group_project_user,1,1,1,1

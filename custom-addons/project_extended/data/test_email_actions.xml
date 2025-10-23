@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Manual Email Test Actions -->
+        <record id="action_send_test_domain_email" model="ir.actions.server">
+            <field name="name">Send Test Domain Email</field>
+            <field name="model_id" ref="model_project_domain"/>
+            <field name="binding_model_id" ref="model_project_domain"/>
+            <field name="state">code</field>
+            <field name="code">
+for record in records:
+    if record.client_id.email:
+        if record.expiry_status in ['urgent', 'expired']:
+            record._send_client_email(record, 'urgent')
+        else:
+            record._send_client_email(record, 'warning')
+        # Log success
+        env.user.notify_success(f"Test email sent to {record.client_id.email} for domain {record.name}")
+    else:
+        # Log warning
+        env.user.notify_warning(f"Client {record.client_id.name} has no email address configured.")
+            </field>
+        </record>
+
+        <record id="action_send_test_hosting_email" model="ir.actions.server">
+            <field name="name">Send Test Hosting Email</field>
+            <field name="model_id" ref="model_project_hosting"/>
+            <field name="binding_model_id" ref="model_project_hosting"/>
+            <field name="state">code</field>
+            <field name="code">
+for record in records:
+    if record.client_id.email:
+        if record.expiry_status in ['urgent', 'expired']:
+            record._send_client_email(record, 'urgent')
+        else:
+            record._send_client_email(record, 'warning')
+        # Log success
+        env.user.notify_success(f"Test email sent to {record.client_id.email} for hosting {record.name}")
+    else:
+        # Log warning
+        env.user.notify_warning(f"Client {record.client_id.name} has no email address configured.")
+            </field>
+        </record>
+    </data>
+</odoo>

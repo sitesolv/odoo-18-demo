@@ -1,0 +1,72 @@
+<odoo>
+  <record id="view_form_project_income" model="ir.ui.view">
+    <field name="name">project.income.form</field>
+    <field name="model">project.income</field>
+    <field name="arch" type="xml">
+      <form string="Project Income">
+        <group>
+          <group>
+            <field name="project_id"/>
+            <field name="client_id"/>
+            <field name="amount"/>
+            <field name="date"/>
+            <field name="description"/>
+          </group>
+          <group>
+            <field name="source_type"/>
+            <field name="payment_id" readonly="1" invisible="source_type != 'payment'"/>
+            <field name="invoice_id" readonly="1" invisible="source_type != 'payment'"/>
+          </group>
+        </group>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_tree_project_income" model="ir.ui.view">
+    <field name="name">project.income.list</field>
+    <field name="model">project.income</field>
+    <field name="arch" type="xml">
+      <list string="Project Income">
+        <field name="project_id"/>
+        <field name="client_id"/>
+        <field name="amount"/>
+        <field name="date"/>
+        <field name="description"/>
+        <field name="source_type"/>
+        <field name="payment_id" optional="hide"/>
+        <field name="invoice_id" optional="hide"/>
+      </list>
+    </field>
+  </record>
+
+
+  <record id="view_search_project_income" model="ir.ui.view">
+    <field name="name">project.income.search</field>
+    <field name="model">project.income</field>
+    <field name="arch" type="xml">
+      <search string="Project Income">
+        <field name="project_id"/>
+        <field name="client_id"/>
+        <field name="description"/>
+        <filter string="Manual Entries" name="manual" domain="[('source_type', '=', 'manual')]"/>
+        <filter string="From Payments" name="payment" domain="[('source_type', '=', 'payment')]"/>
+        <group expand="0" string="Group By">
+          <filter string="Project" name="group_project" domain="[]" context="{'group_by': 'project_id'}"/>
+          <filter string="Client" name="group_client" domain="[]" context="{'group_by': 'client_id'}"/>
+          <filter string="Source Type" name="group_source" domain="[]" context="{'group_by': 'source_type'}"/>
+          <filter string="Date" name="group_date" domain="[]" context="{'group_by': 'date'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
+  <record id="action_project_income" model="ir.actions.act_window">
+    <field name="name">Project Income</field>
+    <field name="res_model">project.income</field>
+    <field name="view_mode">list,form</field>
+    <field name="search_view_id" ref="view_search_project_income"/>
+  </record>
+
+  <menuitem id="menu_project_income_root" name="Income Management" parent="project.menu_main_pm"/>
+  <menuitem id="menu_project_income" name="Project Income" parent="menu_project_income_root" action="action_project_income"/>
+</odoo>

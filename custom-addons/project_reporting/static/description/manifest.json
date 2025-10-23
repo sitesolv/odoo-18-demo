@@ -1,0 +1,12 @@
+{
+    "name": "Project Reporting Dashboard Assets",
+    "version": "1.0.0",
+    "description": "Assets for Project Reporting Dashboard",
+    "assets": {
+        "web.assets_backend": [
+            "project_reporting/static/src/js/project_dashboard.js",
+            "project_reporting/static/src/xml/dashboard_template.xml",
+            "project_reporting/static/src/scss/dashboard.scss"
+        ]
+    }
+}

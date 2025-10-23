@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Income Analysis List View -->
+    <record id="view_project_income_analysis_tree" model="ir.ui.view">
+        <field name="name">project.income.analysis.tree</field>
+        <field name="model">project.income</field>
+        <field name="arch" type="xml">
+            <list string="Income Analysis" create="false" edit="false">
+                <field name="date"/>
+                <field name="project_name"/>
+                <field name="client_name"/>
+                <field name="amount" sum="Total Income"/>
+                <field name="description"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Income Analysis Graph View -->
+    <record id="view_project_income_analysis_graph" model="ir.ui.view">
+        <field name="name">project.income.analysis.graph</field>
+        <field name="model">project.income</field>
+        <field name="arch" type="xml">
+            <graph string="Income Analysis" type="bar">
+                <field name="date" type="row" interval="month"/>
+                <field name="amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Income Analysis Pivot View -->
+    <record id="view_project_income_analysis_pivot" model="ir.ui.view">
+        <field name="name">project.income.analysis.pivot</field>
+        <field name="model">project.income</field>
+        <field name="arch" type="xml">
+            <pivot string="Income Analysis">
+                <field name="project_name" type="row"/>
+                <field name="client_name" type="row"/>
+                <field name="date" type="col" interval="month"/>
+                <field name="amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Income by Project Graph -->
+    <record id="view_project_income_by_project_graph" model="ir.ui.view">
+        <field name="name">project.income.by.project.graph</field>
+        <field name="model">project.income</field>
+        <field name="arch" type="xml">
+            <graph string="Income by Project" type="pie">
+                <field name="project_name" type="row"/>
+                <field name="amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Income by Customer Graph -->
+    <record id="view_project_income_by_customer_graph" model="ir.ui.view">
+        <field name="name">project.income.by.customer.graph</field>
+        <field name="model">project.income</field>
+        <field name="arch" type="xml">
+            <graph string="Income by Customer" type="pie">
+                <field name="client_name" type="row"/>
+                <field name="amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Search View for Income Analysis -->
+    <record id="view_project_income_analysis_search" model="ir.ui.view">
+        <field name="name">project.income.analysis.search</field>
+        <field name="model">project.income</field>
+        <field name="arch" type="xml">
+            <search string="Income Analysis">
+                <field name="project_name"/>
+                <field name="client_name"/>
+                <field name="description"/>
+                <filter string="This Month" name="current_month" 
+                        domain="[('date', '&gt;=', (context_today() - datetime.timedelta(days=30)).strftime('%Y-%m-%d')),
+                                ('date', '&lt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="This Year" name="current_year" 
+                        domain="[('date', '&gt;=', (context_today() - datetime.timedelta(days=365)).strftime('%Y-%m-%d')),
+                                ('date', '&lt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Project" name="group_project" context="{'group_by': 'project_name'}"/>
+                    <filter string="Customer" name="group_customer" context="{'group_by': 'client_name'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Income Analysis Action -->
+    <record id="action_project_income_analysis" model="ir.actions.act_window">
+        <field name="name">Income Analysis</field>
+        <field name="res_model">project.income</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                                      (0, 0, {'view_mode': 'graph', 'view_id': ref('view_project_income_analysis_graph')}),
+                                      (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_project_income_analysis_pivot')}),
+                                      (0, 0, {'view_mode': 'list', 'view_id': ref('view_project_income_analysis_tree')})]"/>
+        <field name="search_view_id" ref="view_project_income_analysis_search"/>
+        <field name="context">{
+            'group_by': ['date:month']
+        }</field>
+    </record>
+
+    <!-- Income by Project Action -->
+    <record id="action_project_income_by_project" model="ir.actions.act_window">
+        <field name="name">Income by Project</field>
+        <field name="res_model">project.income</field>
+        <field name="view_mode">graph,list</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                                      (0, 0, {'view_mode': 'graph', 'view_id': ref('view_project_income_by_project_graph')}),
+                                      (0, 0, {'view_mode': 'list', 'view_id': ref('view_project_income_analysis_tree')})]"/>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Income by Customer Action -->
+    <record id="action_project_income_by_customer" model="ir.actions.act_window">
+        <field name="name">Income by Customer</field>
+        <field name="res_model">project.income</field>
+        <field name="view_mode">graph,list</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                                      (0, 0, {'view_mode': 'graph', 'view_id': ref('view_project_income_by_customer_graph')}),
+                                      (0, 0, {'view_mode': 'list', 'view_id': ref('view_project_income_analysis_tree')})]"/>
+        <field name="context">{}</field>
+    </record>
+</odoo>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Configuration Settings View -->
+        <record id="view_project_extended_config_settings" model="ir.ui.view">
+            <field name="name">project.extended.config.settings.form</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="50"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside">
+                    <app data-string="Project Extended" string="Project Extended" name="project_extended">
+                        <block title="Email Notification Settings" name="email_settings">
+                            <setting string="Email Configuration" help="Configure email settings for expiry notifications">
+                                <div class="content-group">
+                                    <div class="row mt-2">
+                                        <label for="expiry_notification_email" class="col-3 o_light_label"/>
+                                        <field name="expiry_notification_email" class="col-9" placeholder="your-company@email.com"/>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <label for="expiry_notification_mobile" class="col-3 o_light_label"/>
+                                        <field name="expiry_notification_mobile" class="col-9" placeholder="0762682176"/>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <label for="auto_send_emails" class="col-3 o_light_label"/>
+                                        <field name="auto_send_emails" class="col-9"/>
+                                    </div>
+                                </div>
+                            </setting>
+                        </block>
+                        
+                        <block title="Notification Timing" name="timing_settings">
+                            <setting string="Domain Notifications" help="Configure when to send domain expiry notifications">
+                                <div class="content-group">
+                                    <div class="row mt-2">
+                                        <label for="domain_warning_days" class="col-3 o_light_label" string="Warning Days"/>
+                                        <field name="domain_warning_days" class="col-2"/>
+                                        <span class="col-7 text-muted">days before expiry to send warning</span>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <label for="domain_urgent_days" class="col-3 o_light_label" string="Urgent Days"/>
+                                        <field name="domain_urgent_days" class="col-2"/>
+                                        <span class="col-7 text-muted">days before expiry to send urgent notifications</span>
+                                    </div>
+                                </div>
+                            </setting>
+                            
+                            <setting string="Hosting Notifications" help="Configure when to send hosting expiry notifications">
+                                <div class="content-group">
+                                    <div class="row mt-2">
+                                        <label for="hosting_warning_days" class="col-3 o_light_label" string="Warning Days"/>
+                                        <field name="hosting_warning_days" class="col-2"/>
+                                        <span class="col-7 text-muted">days before expiry to send warning</span>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <label for="hosting_urgent_days" class="col-3 o_light_label" string="Urgent Days"/>
+                                        <field name="hosting_urgent_days" class="col-2"/>
+                                        <span class="col-7 text-muted">days before expiry to send urgent notifications</span>
+                                    </div>
+                                </div>
+                            </setting>
+                        </block>
+                    </app>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Action for Configuration -->
+        <record id="action_project_extended_config" model="ir.actions.act_window">
+            <field name="name">Project Extended Settings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module': 'project_extended'}</field>
+        </record>
+
+        <!-- Menu Item -->
+        <menuitem 
+            id="menu_project_extended_config" 
+            name="Settings" 
+            parent="project_extended.menu_project_extended_root" 
+            action="project_extended.action_project_extended_config"
+            sequence="100"/>
+    </data>
+</odoo>

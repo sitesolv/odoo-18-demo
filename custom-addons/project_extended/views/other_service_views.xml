@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Other Service Form View -->
+    <record id="view_other_service_form" model="ir.ui.view">
+        <field name="name">project.other.service.form</field>
+        <field name="model">project.other.service</field>
+        <field name="arch" type="xml">
+            <form string="Other Service Details">
+                <script type="text/javascript">
+                    <![CDATA[
+                    setTimeout(function() {
+                        document.addEventListener('click', function(e) {
+                            if (e.target && e.target.classList.contains('o_toggle_password')) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                
+                                const passwordDiv = e.target.parentElement;
+                                const passwordField = passwordDiv.querySelector('.o_password_field input');
+                                
+                                if (passwordField) {
+                                    if (passwordField.type === 'password') {
+                                        passwordField.type = 'text';
+                                        e.target.textContent = '🙈';
+                                    } else {
+                                        passwordField.type = 'password';
+                                        e.target.textContent = '👁️';
+                                    }
+                                }
+                            }
+                        });
+                    }, 500);
+                    ]]>
+                </script>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Service Name..."/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Service Information">
+                            <field name="project_id" options="{'no_create': True}"/>
+                            <field name="client_id" options="{'no_create': True}"/>
+                            <field name="date"/>
+                            <field name="cost"/>
+                        </group>
+                        <group string="Access Information">
+                            <field name="username"/>
+                            <label for="password" string="Password"/>
+                            <div class="o_row">
+                                <field name="password" password="True" class="o_password_field" nolabel="1"/>
+                                <span class="btn btn-sm btn-outline-secondary o_toggle_password" title="Show/Hide Password" style="cursor: pointer; user-select: none;">👁️</span>
+                            </div>
+                        </group>
+                    </group>
+                    <group string="Additional Information">
+                        <field name="description" nolabel="1" placeholder="Enter any additional notes or information about this service..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Other Service List View -->
+    <record id="view_other_service_list" model="ir.ui.view">
+        <field name="name">project.other.service.list</field>
+        <field name="model">project.other.service</field>
+        <field name="arch" type="xml">
+            <list string="Other Services">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="client_id"/>
+                <field name="date"/>
+                <field name="cost"/>
+                <field name="username"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Other Service Action -->
+    <record id="action_other_service" model="ir.actions.act_window">
+        <field name="name">Other Services</field>
+        <field name="res_model">project.other.service</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add your first other service!
+            </p>
+            <p>
+                Track additional services related to your project.
+            </p>
+        </field>
+    </record>
+
+    <!-- Other Service Action for Project Context -->
+    <record id="action_project_other_service_form" model="ir.actions.act_window">
+        <field name="name">Other Service Details</field>
+        <field name="res_model">project.other.service</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_other_service_form"/>
+        <field name="target">new</field>
+        <field name="context">{'default_project_id': active_id}</field>
+    </record>
+</odoo>

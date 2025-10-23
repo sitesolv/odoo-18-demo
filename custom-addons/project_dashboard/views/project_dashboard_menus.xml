@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Menu -->
+    <menuitem id="menu_project_dashboard_main" 
+              name="Project Dashboard" 
+              sequence="5"
+              action="action_project_dashboard_direct"
+              web_icon="project_dashboard,static/description/icon.png"/>
+    
+    <!-- Dashboard Sub Menu -->
+    <menuitem id="menu_project_dashboard_overview" 
+              name="Dashboard Overview" 
+              parent="menu_project_dashboard_main"
+              action="action_project_dashboard_direct"
+              sequence="10"/>
+    
+    <!-- Income Analysis Menu -->
+    <menuitem id="menu_project_income_analysis" 
+              name="Income Analysis" 
+              parent="menu_project_dashboard_main"
+              sequence="20"/>
+    
+    <menuitem id="menu_project_income_overview" 
+              name="Income Overview" 
+              parent="menu_project_income_analysis"
+              action="action_project_income_analysis"
+              sequence="10"/>
+    
+    <menuitem id="menu_project_income_by_project" 
+              name="Income by Project" 
+              parent="menu_project_income_analysis"
+              action="action_project_income_by_project"
+              sequence="20"/>
+    
+    <menuitem id="menu_project_income_by_customer" 
+              name="Income by Customer" 
+              parent="menu_project_income_analysis"
+              action="action_project_income_by_customer"
+              sequence="30"/>
+    
+    <!-- Expense Analysis Menu -->
+    <menuitem id="menu_project_expense_analysis" 
+              name="Expense Analysis" 
+              parent="menu_project_dashboard_main"
+              sequence="30"/>
+    
+    <menuitem id="menu_project_expense_overview" 
+              name="Expense Overview" 
+              parent="menu_project_expense_analysis"
+              action="action_project_expense_analysis"
+              sequence="10"/>
+    
+    <menuitem id="menu_project_expense_by_type" 
+              name="Expense by Type" 
+              parent="menu_project_expense_analysis"
+              action="action_project_expense_by_type"
+              sequence="20"/>
+    
+    <menuitem id="menu_project_expense_by_project" 
+              name="Expense by Project" 
+              parent="menu_project_expense_analysis"
+              action="action_project_expense_by_project"
+              sequence="30"/>
+</odoo>

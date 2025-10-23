@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Scheduled Action for Domain Expiry Check -->
+        <record id="cron_check_domain_expiry" model="ir.cron">
+            <field name="name">Check Domain Expiry</field>
+            <field name="model_id" ref="model_project_domain"/>
+            <field name="state">code</field>
+            <field name="code">model.check_expiry()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <!-- Scheduled Action for Hosting Expiry Check -->
+        <record id="cron_check_hosting_expiry" model="ir.cron">
+            <field name="name">Check Hosting Expiry</field>
+            <field name="model_id" ref="model_project_hosting"/>
+            <field name="state">code</field>
+            <field name="code">model.check_expiry()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <!-- Manual Action to Reset Notifications -->
+        <record id="action_reset_domain_notifications" model="ir.actions.server">
+            <field name="name">Reset Domain Notifications</field>
+            <field name="model_id" ref="model_project_domain"/>
+            <field name="binding_model_id" ref="model_project_domain"/>
+            <field name="state">code</field>
+            <field name="code">
+records.write({
+    'reminder_sent': False,
+    'urgent_notification': False
+})
+            </field>
+        </record>
+
+        <record id="action_reset_hosting_notifications" model="ir.actions.server">
+            <field name="name">Reset Hosting Notifications</field>
+            <field name="model_id" ref="model_project_hosting"/>
+            <field name="binding_model_id" ref="model_project_hosting"/>
+            <field name="state">code</field>
+            <field name="code">
+records.write({
+    'reminder_sent': False,
+    'urgent_notification': False
+})
+            </field>
+        </record>
+
+    </data>
+</odoo>

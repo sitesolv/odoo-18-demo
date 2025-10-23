@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Expense Analysis List View -->
+    <record id="view_project_expense_analysis_tree" model="ir.ui.view">
+        <field name="name">project.expense.analysis.tree</field>
+        <field name="model">project.expense</field>
+        <field name="arch" type="xml">
+            <list string="Expense Analysis" create="false" edit="false">
+                <field name="date"/>
+                <field name="project_name"/>
+                <field name="expense_type"/>
+                <field name="amount" sum="Total Expenses"/>
+                <field name="description"/>
+                <field name="notes"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Expense Analysis Graph View -->
+    <record id="view_project_expense_analysis_graph" model="ir.ui.view">
+        <field name="name">project.expense.analysis.graph</field>
+        <field name="model">project.expense</field>
+        <field name="arch" type="xml">
+            <graph string="Expense Analysis" type="bar">
+                <field name="date" type="row" interval="month"/>
+                <field name="amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Expense Analysis Pivot View -->
+    <record id="view_project_expense_analysis_pivot" model="ir.ui.view">
+        <field name="name">project.expense.analysis.pivot</field>
+        <field name="model">project.expense</field>
+        <field name="arch" type="xml">
+            <pivot string="Expense Analysis">
+                <field name="project_name" type="row"/>
+                <field name="expense_type" type="row"/>
+                <field name="date" type="col" interval="month"/>
+                <field name="amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Expense by Type Graph -->
+    <record id="view_project_expense_by_type_graph" model="ir.ui.view">
+        <field name="name">project.expense.by.type.graph</field>
+        <field name="model">project.expense</field>
+        <field name="arch" type="xml">
+            <graph string="Expense by Type" type="pie">
+                <field name="expense_type" type="row"/>
+                <field name="amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Expense by Project Graph -->
+    <record id="view_project_expense_by_project_graph" model="ir.ui.view">
+        <field name="name">project.expense.by.project.graph</field>
+        <field name="model">project.expense</field>
+        <field name="arch" type="xml">
+            <graph string="Expense by Project" type="pie">
+                <field name="project_name" type="row"/>
+                <field name="amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Search View for Expense Analysis -->
+    <record id="view_project_expense_analysis_search" model="ir.ui.view">
+        <field name="name">project.expense.analysis.search</field>
+        <field name="model">project.expense</field>
+        <field name="arch" type="xml">
+            <search string="Expense Analysis">
+                <field name="project_name"/>
+                <field name="expense_type"/>
+                <field name="description"/>
+                <filter string="This Month" name="current_month" 
+                        domain="[('date', '&gt;=', (context_today() - datetime.timedelta(days=30)).strftime('%Y-%m-%d')),
+                                ('date', '&lt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="This Year" name="current_year" 
+                        domain="[('date', '&gt;=', (context_today() - datetime.timedelta(days=365)).strftime('%Y-%m-%d')),
+                                ('date', '&lt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter string="Domain Expenses" name="domain_expenses" domain="[('expense_type', '=', 'domain')]"/>
+                <filter string="Hosting Expenses" name="hosting_expenses" domain="[('expense_type', '=', 'hosting')]"/>
+                <filter string="Salary Expenses" name="salary_expenses" domain="[('expense_type', '=', 'salary')]"/>
+                <filter string="Development Expenses" name="development_expenses" domain="[('expense_type', '=', 'development')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Project" name="group_project" context="{'group_by': 'project_name'}"/>
+                    <filter string="Expense Type" name="group_type" context="{'group_by': 'expense_type'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Expense Analysis Action -->
+    <record id="action_project_expense_analysis" model="ir.actions.act_window">
+        <field name="name">Expense Analysis</field>
+        <field name="res_model">project.expense</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                                      (0, 0, {'view_mode': 'graph', 'view_id': ref('view_project_expense_analysis_graph')}),
+                                      (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_project_expense_analysis_pivot')}),
+                                      (0, 0, {'view_mode': 'list', 'view_id': ref('view_project_expense_analysis_tree')})]"/>
+        <field name="search_view_id" ref="view_project_expense_analysis_search"/>
+        <field name="context">{
+            'group_by': ['date:month']
+        }</field>
+    </record>
+
+    <!-- Expense by Type Action -->
+    <record id="action_project_expense_by_type" model="ir.actions.act_window">
+        <field name="name">Expense by Type</field>
+        <field name="res_model">project.expense</field>
+        <field name="view_mode">graph,list</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                                      (0, 0, {'view_mode': 'graph', 'view_id': ref('view_project_expense_by_type_graph')}),
+                                      (0, 0, {'view_mode': 'list', 'view_id': ref('view_project_expense_analysis_tree')})]"/>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Expense by Project Action -->
+    <record id="action_project_expense_by_project" model="ir.actions.act_window">
+        <field name="name">Expense by Project</field>
+        <field name="res_model">project.expense</field>
+        <field name="view_mode">graph,list</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                                      (0, 0, {'view_mode': 'graph', 'view_id': ref('view_project_expense_by_project_graph')}),
+                                      (0, 0, {'view_mode': 'list', 'view_id': ref('view_project_expense_analysis_tree')})]"/>
+        <field name="context">{}</field>
+    </record>
+</odoo>
