@@ -21,7 +21,7 @@ action = {
     <!-- Add menu item for manual sync -->
     <menuitem id="menu_sync_payments" 
               name="Sync Payments to Income" 
-              parent="project_extended.menu_project_income_root" 
+              parent="project_extended.menu_project_extended_root" 
               action="action_sync_payments_to_project_income"
               sequence="20"/>
 </odoo>
